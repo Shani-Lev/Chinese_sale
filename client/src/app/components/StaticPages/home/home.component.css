@@ -1,0 +1,8 @@
+:host {
+    display: flex;
+    height: 85vh; 
+}
+.div{
+    width: 100%;
+    text-align: center;
+}

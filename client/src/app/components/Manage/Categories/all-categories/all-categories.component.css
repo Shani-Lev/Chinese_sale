@@ -1,0 +1,14 @@
+.smallButton{
+    width: 20px;
+    height: 20px;
+    font-size: 0.8em; /* שנה את גודל הטקסט */
+    padding: 0.25rem 0.5rem;
+}
+.icon-button1 {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding-top: 5px;
+    padding-left: 5px;
+    font-size: 0.6rem;
+  }

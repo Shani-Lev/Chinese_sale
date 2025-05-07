@@ -1,0 +1,8 @@
+<form #frm="ngForm">
+    <div class="mar flex flex-column gap-2">
+        <label for="title">קטגוריה<b class="text-dang">*</b></label>
+        <input pInputText id="name" name="name" required [(ngModel)]="category.name" #title="ngModel" />
+        <small *ngIf="title.errors?.['required']">שדה חובה</small>
+    </div>
+    <p-button label="שמור" [disabled]="frm.invalid" (click)="save()" />
+</form>

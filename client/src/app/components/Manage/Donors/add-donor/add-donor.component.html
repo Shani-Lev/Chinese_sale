@@ -1,0 +1,39 @@
+<form #frm="ngForm" >
+    <div class="flex flex-col gap-2 mb-4">
+        <label for="name" class="font-semibold">שם<b class="text-red-500">*</b></label>
+        <input pInputText id="name" name="name" required [(ngModel)]="donor.name" #name="ngModel"
+            class="border rounded p-2" />
+        <small *ngIf="name.errors?.['required']" class="text-red-500">שדה חובה</small>
+    </div>
+    <div class="flex flex-col gap-2 mb-4">
+        <label for="details" class="font-semibold">פרטים</label>
+        <input pInputText id="details" aria-describedby="details-help" name="details" [(ngModel)]="donor.details"
+            class="border rounded p-2" />
+    </div>
+    <div class="grid grid-cols-2 gap-4 mb-4">
+        <div class="flex flex-col">
+            <label for="phone" class="font-semibold">טלפון</label>
+            <input pInputText id="phone" aria-describedby="phone-help" name="phone" [(ngModel)]="donor.phone"
+                class="border rounded p-2" />
+        </div>
+        <div class="flex flex-col">
+            <label for="mail" class="font-semibold">מייל</label>
+            <input pInputText id="mail" aria-describedby="mail-help" name="mail" [(ngModel)]="donor.email"
+                class="border rounded p-2" />
+        </div>
+    </div>
+    <div class="flex flex-col gap-2 mb-4">
+        <label for="logo" class="font-semibold">נתיב ללוגו</label>
+        <div class="flex items-center gap-2 mb-4">
+
+            <input pInputText id="logo" aria-describedby="logo-help" name="logo" [(ngModel)]="donor.logo"
+                class="border rounded p-2 flex-grow" />
+            <p-avatar [image]="donor.logo" class="ml-2" shape="circle" />
+        </div>
+    </div>
+    <div class="flex items-center gap-2 mb-4">
+        <p-checkbox [(ngModel)]="donor.showMe" [binary]="true" name="show" />
+        <label for="show" class="font-semibold">הצג תורם על המתנה</label>
+    </div>
+    <p-button label="שמור" [disabled]="frm.invalid" (click)="save()" name="saveDonor"/>
+</form>

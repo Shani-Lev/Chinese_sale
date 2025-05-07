@@ -1,0 +1,55 @@
+<!-- <div class="card"> -->
+<p-menubar [model]="items">
+    <ng-template #start>
+        <p-avatar image="http://localhost:4200/img/logo4.jpg" class="mr-2" size="xlarge" shape="circle" />
+    </ng-template>
+    <ng-template #item let-item>
+        <ng-container *ngIf="item.route; else urlRef">
+            <a [routerLink]="item.route" class="p-menubar-item-link">
+                <span [class]="item.icon"></span>
+                <span class="ml-2">{{ item.label }}</span>
+            </a>
+        </ng-container>
+        <ng-template #urlRef>
+            <a *ngIf="item.url; else noLink" [href]="item.url" class="p-menubar-item-link">
+                <span [class]="item.icon"></span>
+                <span class="ml-2">{{ item.label }}</span>
+            </a>
+        </ng-template>
+        <ng-template #noLink>
+            <div class="p-menubar-item-link">
+                <span [class]="item.icon"></span>
+                <span class="ml-2">{{ item.label }}</span>
+                <span class="pi pi-fw pi-angle-down ml-2"></span>
+            </div>
+        </ng-template>
+    </ng-template>
+    <ng-template #end>
+
+        <div class="flex items-center gap-2">
+            <!-- <input type="text" pInputText placeholder="Search" class="w-36" /> -->
+            <!-- if(status.text == 'SET'){ -->
+            <p-message *ngIf="statuse?.text === 'SET'" severity="info" icon="pi pi-stopwatch">{{timeLeft}} :ההגרלה</p-message>
+            <!-- } -->
+            @if (user != null){
+            <div (click)="menu.toggle($event)" class="pointer">
+                <p-avatar [label]="letter" size="large" shape="circle" />
+                {{this.user.unique_name}}
+            </div>
+            }
+            <!-- } -->
+            <!-- <p-menu  [model]="user_items"  /> -->
+            <p-menu #menu [model]="user_items" [popup]="true">
+                <ng-template #item let-item>
+                    <ng-container>
+                        <a [routerLink]="item.route" class="p-menu-item-link">
+                            <span [class]="item.icon"></span>
+                            <span class="ml-2">{{ item.label }}</span>
+                        </a>
+                    </ng-container>
+                </ng-template>
+            </p-menu>
+        </div>
+    </ng-template>
+</p-menubar>
+

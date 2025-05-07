@@ -1,0 +1,15 @@
+.container {
+    display: grid;
+    grid-template-columns: 8fr 0.95fr; 
+    height: 100%;
+    max-width: 99.9% !important;
+}
+
+.menu {
+    height: 100%; 
+    overflow-y: auto; 
+}
+
+.router-outlet {
+    height: 100%; 
+}

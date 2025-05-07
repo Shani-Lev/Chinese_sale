@@ -1,0 +1,105 @@
+@if (user == ''){
+<p-message icon="pi pi-user" class="ta" severity="contrast"> עלייך להכנס על מנת לרכוש כרטיסים <a class="font-bold"
+        routerLink="/login"><u>כניסה</u></a></p-message>
+}
+@if (status == 'SET'){
+<p-message icon="pi pi-tags" class="ta" severity="secondary">המכירה עדיין לא נפתחה לרכישת כרטיסים</p-message>
+}
+@if (status == 'OFF'){
+<p-message icon="pi pi-tags" class="ta" severity="secondary"> המכירה סגורה לרכישת כרטיסים</p-message>
+}
+<div style="display: flex; flex-wrap: wrap;">
+    @for(ticket of tickets; track $index) {
+    <div class="mar wma flex flex-row p-6 gap-4"
+        style="width: 32vw; border: 1px solid #ccc; border-radius: 8px; overflow: hidden;" *ngIf="ticket.gift">
+        <div class="left-section"
+            style="flex: 1; display: flex; flex-direction: column; gap: 0.5rem; text-align: left;">
+            <div class="price">
+                <div style="font-size: 0.8rem; color: #666;">מחיר כרטיס: ₪{{ ticket.gift.price }}</div>
+                <div style="font-size: 0.8rem; color: #666; display: flex; align-items: center; gap: 0.5rem;">
+                    <p-inputnumber [(ngModel)]="ticket.amount" [showButtons]="true" buttonLayout="horizontal"
+                        spinnerMode="horizontal" inputId="horizontal" [inputStyle]="{ width: '3rem' }" [min]="1">
+                        <ng-template #incrementbuttonicon>
+                            <span class="pi pi-plus" (click)="add(ticket.gift.id)"></span>
+                        </ng-template>
+
+                        <ng-template #decrementbuttonicon>
+                            <span class="pi pi-minus"
+                                (click)="handleRemove($event, 1, ticket.gift.id, ticket.$index, 'b')"></span>
+                        </ng-template>
+                    </p-inputnumber>
+                </div>
+                <div style="font-size: 0.8rem; color: #666;">כמות כרטיסים: {{ ticket.amount }}</div>
+                <div style="font-weight: bold; font-size: 1.2rem; margin-top: 0.5rem;">
+                    סה"כ: ₪{{ ticket.gift.price * ticket.amount }}
+                </div>
+            </div>
+            <div class="actions" style="display: flex; gap: 0.5rem; justify-content: flex-start;">
+                <p-button icon="pi pi-trash" severity="secondary" [outlined]="true" [disabled]="status != 'ON'"
+                    (click)="handleRemove($event, ticket.amount, ticket.gift.id, ticket.$index, 'a')">
+                </p-button>
+                <p-button icon="pi pi-wallet" styleClass="ml-2" [disabled]="status != 'ON'"
+                    (click)="giftToAddCart = ticket.gift.id; visible = true; totel = ticket.gift.price"></p-button>
+            </div>
+        </div>
+        <div class="right-section"
+            style="flex: 1; display: flex; flex-direction: column; gap: 0.5rem; text-align: right;">
+            <h3 style="margin: 0;">{{ ticket.gift.title }}</h3>
+            <div style="font-size: 0.9rem; color: #666;">{{ ticket.gift.details }}</div>
+            <div class="image-container"
+                style="width: 100%; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                <img [src]="ticket.gift.image" [alt]="ticket.gift.title"
+                    style="width: 100%; height: auto; max-height: 200px; object-fit: contain;"
+                    onerror="this.onerror=null; this.src='noimg.jpeg'" />
+            </div>
+        </div>
+    </div>
+    }
+</div>
+<span *ngIf="tickets.length == 0" class="font-medium text-secondary text-sm" style="margin-left: 10px;">
+    אין לך כרטיסים בסל</span>
+<hr />
+<div class="flex items-center justify-between" style="justify-content: space-between; margin: 5px;">
+    <div>
+        <p-button icon="pi pi-wallet" styleClass="ml-2" [disabled]="status != 'ON'" label="לתשלום"
+        (click)="giftToAddCart = -1; visible = true; totel = totelToPay" severity="contrast"></p-button>
+        <span style="font-weight: bold; font-size: 1.2rem; margin-top: 0.5rem;">
+        סה"כ: ₪{{ totelToPay }}
+    </span>
+
+</div>
+    <span class="font-medium text-secondary text-sm" style="margin-left: 10px;">סך הכל: {{ tickets? tickets.length : 0}}
+        מתנות</span>
+
+</div>
+<p-confirmpopup></p-confirmpopup>
+<p-dialog header="רכישת כרטיסי הגרלה  " [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+    <!-- <span class="p-text-secondary block mb-8">בחר כמות</span> -->
+    <div class="flex items-center gap-4 mb-4">
+        <input pInputText id="username" class="flex-auto" autocomplete="off" />
+        <label for="username" class="font-semibold w-24">:שם מתרים</label>
+    </div>
+    <p-selectButton required [options]="options" [(ngModel)]="type" name="size" optionLabel="label" optionValue="value"
+        layout="horizontal" size="small" unselectable class="selectB" class="mar">
+    </p-selectButton>
+    @if (type ==2){
+    <div class="flex items-center gap-4 mb-4">
+        <p-inputmask mask="9999-9999-9999-9999" placeholder="9999-9999-9999-9999" />
+        <label for="username" class="font-semibold w-24">:מספר אשראי</label>
+    </div>
+    <div class="flex items-center gap-4 mb-4">
+        <p-inputmask mask="99/99" placeholder="99/99" slotChar="mm/dd" />
+        <label for="username" class="font-semibold w-24">:תוקף</label>
+    </div>
+    }
+    @else{
+    <span class="p-text-secondary block mb-8">יש להעביר את הסכום לידי המתרים תוך שני ימי עסקים</span>
+    }
+    <div class="flex justify-between items-center">
+        <div class="mt-0 font-semibold text-xl">{{ '₪' + totel * anount }}</div>
+        <span>
+            <p-button label="ביטול" severity="secondary" (click)="visible = false" class="mar" />
+            <p-button label="הוספה" (click)="buy(); visible = false" class="mar" />
+        </span>
+    </div>
+</p-dialog>

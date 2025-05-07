@@ -1,0 +1,77 @@
+<div class="card p-4">
+    <p-dialog [(visible)]="addGiftVisiable" [style]="{ width: '450px' }" header="פרטי מתנה" [modal]="true"
+        styleClass="p-fluid" (onHide)="close()">
+        <form #frm="ngForm" appPriceSize>
+            <div class="mb-4">
+                <label for="title" class="block text-sm font-medium text-gray-700">כותרת<b class="text-red-500">*</b></label>
+                <input pInputText id="title" name="title" required [(ngModel)]="gift.title" #title="ngModel" 
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" />
+                <small *ngIf="title.errors?.['required']" class="text-red-500">שדה חובה</small>
+            </div>
+            <div class="mb-4">
+                <label for="details" class="block text-sm font-medium text-gray-700">פרטים</label>
+                <input pInputText id="details" name="details" [(ngModel)]="gift.details" 
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" />
+            </div>
+            <div class="mb-4">
+                <label for="price" class="block text-sm font-medium text-gray-700">מחיר</label>
+                <input pInputText pKeyFilter="num" id="price" name="price" [(ngModel)]="gift.price" 
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" />
+                <small *ngIf="frm.controls['price']?.errors?.['PriceSizeDirective']" class="text-red-500">המחיר גבוהה,
+                    בחר גודל גדול יותר</small>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700">תורמים</label>
+                <div class="flex items-center mb-4">
+                    <p-multiSelect [options]="donorList" [(ngModel)]="gift.donors" optionLabel="name" name="donor"
+                        placeholder="Select donors" class="flex-grow-1"></p-multiSelect>
+                    <div class="ml-2">
+                        <p-button icon="pi pi-plus-circle" (click)="openAddDonor()" name="addDonorB"></p-button>
+                    </div>
+                </div>
+                <p-card class="card" *ngIf="donorVisiable == true">
+                    <router-outlet name="addDonor"></router-outlet>
+                </p-card>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700">גודל תצוגה</label>
+                <p-selectButton required [options]="sizes" [(ngModel)]="gift.size" name="size" optionLabel="label"
+                    optionValue="value" layout="horizontal" size="small" unselectable class="selectB"></p-selectButton>
+                <small *ngIf="frm.errors?.['sizeInvalid']" class="text-red-500">בחר גודל גדול יותר</small>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700">קטגוריות</label>
+                <div class="flex items-center mb-4">
+                    <p-multiSelect [options]="categoryList" [(ngModel)]="gift.categories" optionLabel="name"
+                        name="Category" placeholder="בחר קטגוריות" class="flex-grow-1"></p-multiSelect>
+                    <div class="ml-2">
+                        <p-button icon="pi pi-plus-circle" (click)="openAddCategory()" name="addCategoryB"></p-button>
+                    </div>
+                </div>
+                <p-card class="card" *ngIf="categoryVisiable == true">
+                    <router-outlet name="addCategory"></router-outlet>
+                </p-card>
+            </div>
+            <div class="mb-4">
+                <label for="image" class="block text-sm font-medium text-gray-700">תמונה</label>
+                <p-image [src]="gift.image" [preview]="true" alt="no image" width="250">
+                    <ng-template #indicator>
+                        <i class="pi pi-search"></i>
+                    </ng-template>
+                    <ng-template #image>
+                        <img [src]="gift.image" alt="no image" width="250" />
+                    </ng-template>
+                    <ng-template #preview let-style="style" let-previewCallback="previewCallback">
+                        <img [src]="gift.image" alt="no image" [style]="style" (click)="previewCallback()" />
+                    </ng-template>
+                </p-image>
+                <input pInputText id="image" name="image" [(ngModel)]="gift.image" 
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" />
+                <small>כולל סיומת הקובץ</small>
+            </div>
+            <small *ngIf="donorVisiable || categoryVisiable" class="text-red-500">סגור תיבות דו-שיח</small>
+            <br/>
+            <p-button label="שמור" [disabled]="frm.invalid && !donorVisiable && !categoryVisiable" (click)="save()" name="saveGift"></p-button>
+        </form>
+    </p-dialog>
+</div>

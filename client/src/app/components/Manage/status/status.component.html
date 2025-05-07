@@ -1,0 +1,71 @@
+<div class="all">
+    <p-timeline [value]="events" align="alternate" styleClass="customized-timeline">
+        <ng-template #marker let-event>
+            <div class="relative flex items-center justify-center">
+                @if(event.isActive == true){
+                <div class="absolute h-12 w-12 rounded-full bg-blue-500 opacity-75 animate-ping"></div>
+                }
+                <span class="iconTimeLine flex items-center justify-center text-white rounded-full z-10 shadow-sm"
+                    [style]="{ 'background-color': event.color }">
+                    <i [class]="event.icon"></i>
+                </span>
+            </div>
+        </ng-template>
+        <ng-template #content let-event>
+            <p-card [header]="event.status">
+                <div style="width: 100%; height: 100%; border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center;"
+                    [class]="event.isActive + 'f' ">
+                    <img *ngIf="event.image" [src]="'http://localhost:4200/img/' + event.image" [alt]="event.name"
+                        onerror="this.onerror=null; this.src='noimg.jpeg'" width="60%" class="shadow" />
+                    <p class="mar" style="text-align: center;">
+                        {{event.text}}
+                    </p>
+                    @if(event.isActive == true){
+                    @if(status != null && status.text != 'OFF'){
+                    <div style="display: flex; align-items: center;">
+                        <p-button icon="pi pi-pencil" label="ערוך" [text]="true" (click)="visiblea = true; type = 2;"/>
+                        <p class="mar" style="text-align: center;">
+                            <b>{{status.lottoryEnd}} :{{timeText}}</b>
+                        </p>
+
+                    </div>
+
+                    }
+                    <p-button [label]="buttonText" [text]="true" icon="pi pi-angle-double-down"
+                        (click)="confirm($event)" />
+                    }
+
+                </div>
+            </p-card>
+        </ng-template>
+    </p-timeline>
+    <!-- <p-confirmdialog  #cd1/> -->
+</div>
+<p-dialog [header]="timeText" [modal]="true" [(visible)]="visiblea" [style]="{ width: '25rem' }">
+    <p-datepicker inputId="calendar-24h" [(ngModel)]="date" [showTime]="true" [inline]="true" [hourFormat]="'24'" [minDate]="minDate"/>
+    <div class="mar flex justify-end gap-2">
+        <p-button label="ביטול" severity="secondary" (click)="visiblea = false" />
+        <p-button label="הוספה"  (click)="save()"/>
+    </div>
+</p-dialog>
+
+<p-confirmdialog>
+    
+    <ng-template *ngIf="showActions == true" #headless let-message >
+        <div class="flex flex-col items-center p-8 bg-surface-0 dark:bg-surface-900 rounded">
+            <div
+                class="rounded-full bg-primary text-primary-contrast inline-flex justify-center items-center h-24 w-24 -mt-20"
+            >
+                <i class="pi pi-sparkles !text-5xl"></i>
+            </div>
+            <span class="font-bold text-2xl block mb-2 mt-6">!הפעלת מכירה סינית חדשה</span>
+            <p class="mb-0">:אתה יכול לרוקן מאגרי נתונים</p>
+            <div class="flex items-center gap-2 mt-6">
+                <p-button label="נקה מתנות" styleClass="w-32" (click)="clear(1); "></p-button>
+                <p-button label="נקה תורמים" [outlined]="true"  styleClass="w-32" (click)="clear(3);"></p-button>
+                <p-button label="נקה קטגוריות" [outlined]="true"  styleClass="w-32" (click)="clear(2);"></p-button>
+                <p-button icon="pi pi-times" [outlined]="true"  styleClass="w-32" (click)="confirmationService.close(); this.showActions=false"></p-button>
+            </div>
+        </div>
+    </ng-template>
+</p-confirmdialog>

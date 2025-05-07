@@ -1,0 +1,19 @@
+<div class="container">    
+        <div class="router-outlet">
+        <router-outlet ></router-outlet>
+    </div>
+    <div class="p-menu fixed-header">
+        <p-menu #menu [model]="items">
+            <ng-template #item let-item>
+                <ng-container>
+                    <a [routerLink]="item.route" class="p-menu-item-link">
+                        <span [class]="item.icon"></span>
+                        <span class="ml-2">{{ item.label }}</span>
+                    </a>
+                </ng-container>
+            </ng-template>
+        </p-menu>
+    </div>
+
+    
+</div>

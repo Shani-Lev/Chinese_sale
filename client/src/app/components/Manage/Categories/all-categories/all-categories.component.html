@@ -1,0 +1,30 @@
+<div>
+    <div class="mar flex items-center justify-between" style="justify-content: space-between; margin: 18px;">
+        <span class="text-xl font-bold">קטגוריות</span>
+        <p-button label="הוספה" icon="pi pi-plus-circle" (click)="addCategort()" severity="contrast"></p-button>
+    </div>
+    <p-dialog [(visible)]="openAdd" [style]="{ width: '450px' }" header="הוספת קטגוריה" [modal]="true"
+        styleClass="p-fluid" (onHide)="hide()">
+        <router-outlet></router-outlet>
+    </p-dialog>
+    @for(c of categories; track c.id){
+    <p-chip class="mar !py-0 !pl-0 !pr-4 mybut" >
+        <button class="icon-button1" aria-label="Delete" (click)="confirm2($event, c)">
+            <i class="pi pi-trash"></i>
+        </button>
+        <span class="ml-2 font-medium">
+            {{c.name}}
+        </span>
+    </p-chip>
+    }
+
+    <p style="margin-left: 10px;">
+        סך הכל {{ categories ? categories.length : 0 }} קטגוריות
+    </p>
+    @if(1 > categories.length ){
+    <p style="margin-left: 10px;" >
+        עוד לא הוספת קטגוריות
+    </p>
+    }
+</div>
+<p-confirmpopup />

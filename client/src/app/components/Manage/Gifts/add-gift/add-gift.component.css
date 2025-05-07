@@ -1,0 +1,11 @@
+
+.selectB{
+    display: inline-flex !important; /* מבטל כל הגדרה קודמת */
+    flex-direction: row !important; /* מבטל כל כיוון אחר */
+    width: 100%; /* או כל ערך אחר שתרצה */
+}
+.text-dang{
+    color: red;
+    display: inline;
+    white-space: nowrap;
+}

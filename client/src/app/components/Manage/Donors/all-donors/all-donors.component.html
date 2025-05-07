@@ -1,0 +1,100 @@
+<div class="card">
+    <!-- <app-all-categories></app-all-categories> -->
+    <hr />
+    <p-table [value]="donors" dataKey="id" [tableStyle]="{ 'min-width': '60rem' }" [expandedRowKeys]="expandedRows"
+        (onRowExpand)="onRowExpand($event)" (onRowCollapse)="onRowCollapse($event)">
+        <ng-template #caption>
+            <div class="flex items-center justify-between" style="justify-content: space-between;">
+                <span class="text-xl font-bold">תורמים</span>
+                <p-iconfield>
+                    <p-inputicon styleClass="pi pi-search" />
+                        <input type="text" pInputText (input)="search($event)"
+                        placeholder="...שם, מייל, מתנה"  />
+                </p-iconfield>
+
+                <p-button label="הוספה" icon="pi pi-plus-circle" (click)="addDonor()" severity="contrast"></p-button>
+            </div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th style="width: 5rem"></th>
+                <th>האם להציג</th>
+                <th>טלפון</th>
+                <th>מייל</th>
+                <th>פרטים</th>
+                <th>שם</th>
+                <th style="width: 5rem">מתנות</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-donor let-expanded="expanded">
+            <tr>
+                <td>
+                    <div style="display: flex;">
+                        <p-button icon="pi pi-trash" [rounded]="true" [text]="true" (click)="confirm($event, donor)"
+                            severity="secondary" />
+                        <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" (click)="update(donor)" />
+                    </div>
+                </td>
+                <td>
+                    <p-tag [value]="donor.showMe" [severity]="getSeverity(donor.showMe)"></p-tag>
+                </td>
+                <td>{{ donor.phone }}</td>
+                <td>{{ donor.email }}</td>
+                <td>{{ donor.details }}</td>
+                <td>
+                    <p-chip [label]="donor.name" [image]="donor.logo" alt="donor.name"></p-chip>
+                </td>
+                <td>
+                    <p-button type="button" pRipple (click)="toggleRow(donor)" [text]="true" [rounded]="true"
+                        [plain]="true"
+                        [icon]="expandedRows[donor.id] ? 'pi pi-chevron-down' : 'pi pi-chevron-left'"></p-button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #expandedrow let-donor>
+            <tr>
+                <td colspan="6">
+                    <div class="p-4">
+                        <p>מתנות תרומת <b>{{ donor.name }}</b></p>
+                        <p-table [value]="donor.gifts" dataKey="id">
+                            <ng-template #header>
+            <tr>
+
+
+                <th>מחיר </th>
+                <th>תמונה </th>
+                <th>פרטים </th>
+                <th>כותרת </th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-gift>
+            <tr>
+                <td>{{ gift.price }}</td>
+                <td>
+                    <img [src]="'http://localhost:4200/' + gift.image" [alt]="gift.name" width="50" class="shadow-lg" />
+                </td>
+                <td>{{ gift.details }}</td>
+                <td>{{ gift.title }}</td>
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="6">.לא הוגדרו עדיין מתנות על שם תורם זה</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+</td>
+</tr>
+</ng-template>
+<ng-template #footer>
+    <p style="margin-left: 10px;"> סך הכל {{ donors ? donors.length : 0 }} תורמים </p>
+</ng-template>
+</p-table>
+<p-dialog [(visible)]="openAddDonor" [style]="{ width: '450px' }" header="הוספת תורם" [modal]="true"
+    styleClass="p-fluid" (onHide)="hide()">
+    <router-outlet></router-outlet>
+</p-dialog>
+</div>
+
+<p-confirmpopup />

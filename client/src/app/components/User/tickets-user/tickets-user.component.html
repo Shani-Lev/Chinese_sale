@@ -1,0 +1,64 @@
+@if (user == ''){
+    <p-message icon="pi pi-user" class="ta" severity="contrast">  עלייך להכנס על מנת לרכוש כרטיסים  <a class="font-bold" routerLink="/login"><u>כניסה</u></a></p-message>
+    }
+@if (status == 'SET'){
+<p-message icon="pi pi-tags" class="ta" severity="secondary">המכירה עדיין לא נפתחה לרכישת כרטיסים</p-message>
+}
+@if (isWin == true){
+    <p-message icon="pi pi-gift" class="ta" severity="success">🎉🎉🎉!!!מזל טוב, זכית🎉🎉🎉</p-message>
+    }
+<div style="display: flex; flex-wrap: wrap;">
+    @for(ticket of tickets; track $index){
+    <!-- 
+            <div class="absolute bg-yellow-500 opacity-75 animate-ping"></div>
+            <div class="absolute h-12 w-12 rounded-full bg-blue-500 opacity-75 animate-ping"></div>
+           [ngClass]="{'absolute bg-yellow-500 opacity-75 animate-ping': ticket.isWin}" } -->
+
+    <div class="border border-surface rounded-border m-2 p-4" style="width: 15vw;">
+        <div class="sb flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
+            <div class="sil flex flex-row md:flex-col justify-between items-start gap-2">
+
+        <div class="mb-4 bg-surface-100 dark:bg-surface-700 p-1" style="border-radius: 30px">
+            <div class="bg-surface-0 dark:bg-surface-900 flex items-center gap-2 justify-center py-1 px-2"
+                style="border-radius: 30px; box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.04), 0px 1px 2px 0px rgba(0, 0, 0, 0.06)">
+                <span class="text-surface-900 dark:text-surface-0 font-medium text-sm">{{
+                    ticket.amount
+                    }}</span>
+                <i class="pi pi-bookmark-fill text-yellow-500"></i>
+            </div>
+        </div>
+            </div></div>
+        <div class="mb-4 font-medium">{{ ticket.gift.title }}</div>
+        <!-- </div> -->
+        <div class="mb-4">
+            <div class="relative mx-auto ">
+                <img [src]="ticket.gift.image" [alt]="ticket.name" class="w-full rounded-border"
+                    onerror="this.onerror=null; this.src='noimg.jpeg'" />
+            </div>
+        </div>
+        @if(status == 'OFF'){
+        <div class="mb-4">
+            @if(ticket.winner != null){
+                @if(ticket.isWin == true){
+                    <div class="absolute h-12 w-20 rounded-full bg-yellow-500 opacity-75 animate-ping"></div>
+                    <p-message icon="pi pi-sparkles" class="ta" severity="success">!!!זכית</p-message>
+                }
+                    {{ticket.winner.name}} :זוכה
+            }
+            @else{
+            ההגרלה עדיין לא נערכה
+            }
+        </div>
+        }
+    </div>
+
+    }
+</div>
+<span *ngIf="tickets.length == 0" class="font-medium text-secondary text-sm" style="margin-left: 10px;">
+    עדיין לא הוספת כרטיסים לסל</span>
+    <div>
+    <hr />
+    <span class="font-medium text-secondary text-sm" style="margin-left: 10px;">סך הכל: {{ tickets?  tickets.length : 0}}
+        מתנות</span>
+    
+    </div>

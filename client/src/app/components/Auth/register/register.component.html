@@ -1,0 +1,31 @@
+<div class="full flex flex-col items-center justify-center bg-gray-100">
+    <form #frm="ngForm" class="bg-white p-6 rounded-lg shadow-md w-96">
+        <p-floatlabel variant="on">
+            <input pInputText id="name" name="name" [(ngModel)]="user.name" class="ng-dirty p-2 border border-gray-300 rounded" required />
+            <label for="name">שם</label>
+        </p-floatlabel>
+        <p-floatlabel variant="on" class="mt-2"> <!-- עדכון מ-MT-4 ל-MT-2 -->
+            <p-password id="password" name="password" [toggleMask]="true" [(ngModel)]="user.password" class="ng-dirty p-2 border border-gray-300 rounded border-none" />
+            <label for="password">סיסמא</label>
+        </p-floatlabel>
+        <p-floatlabel variant="on" class="mt-2"> <!-- עדכון מ-MT-4 ל-MT-2 -->
+            <p-password id="check-password" name="check-password" [feedback]="false" [(ngModel)]="checkPassword" class="ng-dirty p-2 border border-gray-300 rounded border-none" />
+            <label for="check-password">אימות סיסמא</label>
+        </p-floatlabel>
+        <div *ngIf="user.password !== checkPassword && frm.submitted" class="text-red-500 mt-2">
+            <small>סיסמאות אינן תואמות!</small>
+        </div>
+        <p-floatlabel variant="on" class="mt-4">
+            <input pInputText id="email" name="email" [(ngModel)]="user.email" class="ng-dirty p-2 border border-gray-300 rounded" required />
+            <label for="email">מייל</label>
+        </p-floatlabel>
+        <p-floatlabel variant="on" class="mt-4">
+            <input pInputText id="phone" name="phone" [(ngModel)]="user.phone" class="ng-dirty p-2 border border-gray-300 rounded" />
+            <label for="phone">טלפון</label>
+        </p-floatlabel>
+        <div class="flex justify-between mt-6">
+            <p-button label="הרשמה" (click)="register()" class="w-full mr-2" />
+            <p-button label="כניסה" variant="outlined" [link]="true" (click)="login()" class="w-full" />
+        </div>
+    </form>
+</div>

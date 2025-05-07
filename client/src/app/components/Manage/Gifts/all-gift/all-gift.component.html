@@ -1,0 +1,146 @@
+<div class="card">
+    <router-outlet></router-outlet>
+
+    <div class="card">
+        @if (status != 'SET'){
+        <p-message icon="pi pi-cog" class="ta" severity="secondary">אין אפשרות לערוך מתנות קיימות לאחר פתיחת
+            המכירה</p-message>
+        }
+        <div class="flex items-center justify-between" style="justify-content: space-between; margin: 5px;">
+            <span class="text-xl font-bold">מתנות</span>
+            <div>
+                <p-button (click)="showDialog()" icon="pi pi-search" label="חיפוש" severity="secondary"
+                    styleClass="min-w-40" />
+
+                <p-button (click)="getAllGifts()" icon="pi pi-refresh" [text]="true" severity="secondary" />
+            </div>
+
+            <p-button label="הוספה" icon="pi pi-plus-circle" (click)="openAddGift()" severity="contrast"
+                styleClass="min-w-40" [disabled]="status != 'SET'"/>
+
+        </div>
+        <hr />
+        <p-dataview #dv [value]="giftList">
+            <ng-template #list let-items>
+                <div class="grid grid-cols-12 gap-4 grid-nogutter">
+                    <div class="col-span-12" *ngFor="let item of items; let first = first" class="col-span-12">
+                        <div class="wma flex flex-col sm:flex-row sm:items-center p-6 gap-4"
+                            [ngClass]="{ 'border-t border-surface-200 dark:border-surface-700': !first }">
+                            <div class="mim md:w-40 relative" style="position: relative;">
+                                <img class=" block xl:block mx-auto rounded-border" width="200" [src]="item.image"
+                                    alt="תמונה" onerror="this.onerror=null; this.src='noimg.jpeg'" />
+                                <div style="width: 100%; display: flex; flex-wrap: wrap; " class="absolute"
+                                    [style.left.px]="4" [style.top.px]="4">
+                                    @for (category of item.categories; track $index){
+                                    <p-tag [value]="category.name" severity="secondary" class="tag mar"
+                                        styleClass="dark:!bg-surface-900"></p-tag>
+
+                                    }
+                                </div>
+
+
+                            </div>
+                            <div class="sb flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
+                                <div class="sil flex flex-row md:flex-col justify-between items-start gap-2">
+                                    <div>
+                                        <h3>{{ item.title }}</h3>
+                                        <span class="font-medium text-secondary text-sm">{{ item.details }}</span>
+                                    </div>
+                                    <div class="bg-surface-100 dark:bg-surface-700 p-1" style="border-radius: 30px">
+                                        <div class="bg-surface-0 dark:bg-surface-900 flex items-center gap-2 justify-center py-1 px-2"
+                                            style="border-radius: 30px; box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.04), 0px 1px 2px 0px rgba(0, 0, 0, 0.06)">
+                                            <span class="text-surface-900 dark:text-surface-0 font-medium text-sm">{{
+                                                item.size
+                                                }}</span>
+                                            <i class="pi pi-star-fill text-yellow-500"></i>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="bg-surface-100 dark:bg-surface-700 p-1" style="border-radius: 30px">
+                                        <div class="bg-surface-0 dark:bg-surface-900 flex items-center gap-2 justify-center py-1 px-2"
+                                            style="border-radius: 30px; box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.04), 0px 1px 2px 0px rgba(0, 0, 0, 0.06)">
+                                            <span class="text-surface-900 dark:text-surface-0 font-medium text-sm">{{
+                                                item.size
+                                                }}</span>
+                                            <i class="pi pi-star-fill text-yellow-500"></i>
+                                        </div>
+                                    </div> -->
+                                </div>
+                                <div class="sil" style="display: flex; flex-direction:column; align-items: end;">
+                                    <div class="mar" style="display: flex; flex-wrap: wrap; justify-content: end;">
+                                        @for(donor of item.donors; track $index){
+                                        <p-chip [label]="donor.name" [image]="donor.logo" alt="donor.name"
+                                            class="mar" />}
+                                    </div>
+                                    <span class="mar text-xl font-semibold text-surface-900 dark:text-surface-0">{{
+                                        '₪' + item.price
+                                        }}</span>
+                                    <div class="mar flex flex-row-reverse md:flex-row gap-2">
+                                        <p-button icon="pi pi-trash" [outlined]="true" (onClick)="confirm($event, item)"
+                                            [disabled]="status != 'SET'" />
+                                        <p-button icon="pi pi-pencil"
+                                            (click)="giftToSend = item; type='update'; openAddGift()"
+                                          
+                                            [disabled]="status != 'SET'" />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- <hr /> -->
+                    </div>
+                </div>
+                <div>
+                    <hr />
+                    <span class="font-medium text-secondary text-sm" style="margin-left: 10px;">סך הכל: {{ items?
+                        items.length : 0}}
+                        מתנות</span>
+
+                </div>
+            </ng-template>
+        </p-dataview>
+    </div>
+</div>
+<p-confirmpopup />
+<p-dialog header="חיפוש מתנות" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+    <span class="text-surface-500 dark:text-surface-400 block mb-8">הכנס את תנאי החיפוש כאן</span>
+    <div class="flex items-center gap-4 mb-4">
+        <input pInputText id="username" class="flex-auto" [(ngModel)]="searchParameters.name" autocomplete="off"
+            name="name" />
+        <label for="username" class="font-semibold w-24">מתנה</label>
+    </div>
+    <div class="flex items-center gap-4 mb-8">
+        <input pInputText id="email" class="flex-auto" [(ngModel)]="searchParameters.donor" autocomplete="off"
+            name="donor" />
+        <label for="email" class="font-semibold w-24">תורם</label>
+    </div>
+    <div class="flex items-center gap-4 mb-8">
+        <p-inputnumber [(ngModel)]="searchParameters.price" [showButtons]="true" buttonLayout="horizontal"
+            spinnerMode="horizontal" inputId="horizontal" [inputStyle]="{ width: '3rem' }" [min]="10" name="price">
+            <ng-template #incrementbuttonicon>
+                <span class="pi pi-plus"></span>
+            </ng-template>
+
+            <ng-template #decrementbuttonicon>
+                <span class="pi pi-minus"></span>
+            </ng-template>
+        </p-inputnumber>
+        <label for="email" class="font-semibold w-24">מחיר</label>
+    </div>
+    <div class="flex items-center gap-4 mb-8">
+        <p-inputnumber [(ngModel)]="searchParameters.minSales" [showButtons]="true" buttonLayout="horizontal"
+            spinnerMode="horizontal" inputId="horizontal" [inputStyle]="{ width: '3rem' }" [min]="0" name="minsales">
+            <ng-template #incrementbuttonicon>
+                <span class="pi pi-plus"></span>
+            </ng-template>
+
+            <ng-template #decrementbuttonicon>
+                <span class="pi pi-minus"></span>
+            </ng-template>
+        </p-inputnumber>
+        <label for="email" [(ngModel)]="searchParameters.donor" class="font-semibold w-24">מינימום כרטיסים שנקנו</label>
+    </div>
+    <div class="flex justify-end gap-2">
+        <p-button label="ביטול" severity="secondary" (click)="visible = false" />
+        <p-button label="חיפוש" icon="pi pi-search" (click)="search(); visible = false" />
+    </div>
+</p-dialog>

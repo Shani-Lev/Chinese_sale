@@ -1,0 +1,78 @@
+@if (status == 'SET'){
+<p-message icon="pi pi-cog" class="ta" severity="secondary">המכירה עוד לא הפתחה, לקוחות אינם יכולים לרכוש כרטיסים</p-message>
+}
+@else{
+@if (status == 'OFF' && tickets[tickets.length-1].gift == null){
+<p-message icon="pi pi-gauge" class="ta" severity="contrast">סך הכל: רווח: ₪{{tickets[tickets.length-1].sum}},
+    {{tickets[tickets.length-1].sales}} כרטיסים נקנו</p-message>
+}
+
+<p-selectButton required [options]="aortOptions" [(ngModel)]="sortType" name="sort" optionValue="value"
+    layout="horizontal" size="large" unselectable class="mar" (click)="getWithSort()">
+
+    <ng-template #item let-item>
+        <i [class]="item.icon"></i>
+    </ng-template>
+</p-selectButton>
+<div class="card flex justify-center" style="display: flex; flex-wrap: wrap;">
+    @for (ticket of tickets; track ticket.gift?.id){
+    <div *ngIf="ticket.gift != null" class="border border-surface rounded-border m-2 p-4" style="width: 15vw;">
+        <div class="mb-4 font-medium">{{ticket.gift.title}}</div>
+        <div class="mb-4">
+            <div class="relative mx-auto ">
+                <img [src]="ticket.gift.image" [alt]="ticket.gift.title" class="w-full rounded-border"
+                    onerror="this.onerror=null; this.src='noimg.jpeg'" />
+            </div>
+        </div>
+        <div class="sb flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
+            <div class="sil flex flex-row md:flex-col justify-between items-start gap-2">
+
+                <div class="mb-4 bg-surface-100 dark:bg-surface-700 p-1" style="border-radius: 30px">
+                    <div class="bg-surface-0 dark:bg-surface-900 flex items-center gap-2 justify-center py-1 px-2"
+                        style="border-radius: 30px; box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.04), 0px 1px 2px 0px rgba(0, 0, 0, 0.06)">
+                        <span class="text-surface-900 dark:text-surface-0 font-medium text-sm">{{
+                            ticket.sales
+                            }}</span>
+                        <i class="pi pi-bookmark-fill text-yellow-500"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if(status == 'OFF'){
+        <p-message icon="pi pi-sliders-v" class="ta" severity="secondary">₪{{ticket.sum}} :רווחים</p-message>
+        }
+        <div class="mar mb-4 flex justify-center items-center">
+            <p-button type="button" label="רוכשים" icon="pi pi-users" (onClick)="toggle($event, ticket.gift.id)" />
+        </div>
+        @if(status == 'OFF'){
+        <div style="font-weight: bold; font-size: 1.2rem; margin-top: 0.5rem;">
+            {{ticket.winnerId}} :מספר זוכה
+        </div>}
+        <p-popover #op>
+            <div class="flex flex-col gap-4">
+                <div>
+                    <span class="font-medium block mb-2">רוכשים</span>
+                    <ul class="list-none p-0 m-0 flex flex-col">
+                        <li *ngFor="let user of users"
+                            class="flex items-center gap-2 px-2 py-3 hover:bg-emphasis cursor-pointer rounded-border">
+                            <div>
+                                <span class="font-medium">{{ user.name }}</span>
+                                <div class="text-sm text-surface-500 dark:text-surface-400">{{ user.email }}</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </p-popover>
+    </div>
+    }
+</div>
+}
+    <span *ngIf="tickets.length == 0" class="font-medium text-secondary text-sm" style="margin-left: 10px;">
+        לקוחות עדיין לא קנו כרטיסים</span>
+<div>
+    <hr />
+    <span class="font-medium text-secondary text-sm" style="margin-left: 10px;">סך הכל: {{ tickets?  tickets.length : 0}}
+        מתנות</span>
+
+</div>

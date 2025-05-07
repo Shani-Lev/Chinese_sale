@@ -1,0 +1,16 @@
+<div class="full flex flex-col items-center justify-center bg-gray-100">
+    <div class="bg-white p-6 rounded-lg shadow-md w-96 h-auto"> 
+        <p-floatlabel variant="on">
+            <input pInputText id="username" [(ngModel)]="username" class="ng-dirty ng-invalid p-2 border border-gray-300 rounded" />
+            <label for="username">Email</label>
+        </p-floatlabel>
+        <p-floatlabel variant="on" class="mt-2"> <!-- עדכון מ-MT-4 ל-MT-2 -->
+            <p-password id="password" [(ngModel)]="password" [feedback]="false" class="ng-dirty ng-invalid p-2 border border-gray-300 rounded border-none" />
+            <label for="password">סיסמא</label>
+        </p-floatlabel>
+        <div class="flex justify-between mt-6">
+            <p-button label="כניסה" (click)="login()" class="w-full mr-2" />
+            <p-button label="הרשמה" variant="outlined" [link]="true" (click)="register()" class="w-full" />
+        </div>
+    </div>
+</div>

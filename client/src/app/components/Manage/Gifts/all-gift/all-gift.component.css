@@ -1,0 +1,23 @@
+/* .sil{
+    display: flex;
+    flex-direction: column !important;
+    justify-content: space-between;
+}
+.mim{
+    width: min-content !important;
+}
+.sb{
+    justify-content: space-between !important;
+    max-height: min-content !important;
+}
+.wma{
+    padding: 15px !important;
+    min-width: 85vw;
+    height: 35vh !important;
+}
+.tag {
+    margin: 4px; 
+    padding: 4px 8px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+} */
